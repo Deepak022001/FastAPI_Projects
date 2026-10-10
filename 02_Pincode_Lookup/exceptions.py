@@ -1,31 +1,37 @@
-from fastapi.responses import JSONResponse
 from fastapi import Request
+from fastapi.responses import JSONResponse
 
-class PincodeNotFounError(Exception):
-    def __init__(self,pincode:str):
-        self.pincode=pincode
 
-class InvalidPinCodeError(Exception):
-    def __init__(self,pincode:str="Invalid format",reason:str="Invalid format"):
-        self.pincode=pincode
-        self.reason=reason
+class Pincode_not_found_Error(Exception):
+    def __init__(self, pincode: str):
+        self.pincode = pincode
 
-async def pincode_not_found_handler(request:Request,exc:PincodeNotFounError):
+
+class Invalid_Pincode_Error(Exception):
+    def __init__(
+        self, reason: str = "Invalid pincode", pincode: str = "Invalid format"
+    ):
+        self.reason = reason
+        self.pincode = pincode
+
+
+async def Pincode_Not_Found_Handler(request: Request, exc: Pincode_not_found_Error):
     return JSONResponse(
         status_code=404,
         content={
-            "error":"pincode not found",
-            "message":f"No location for pincode :{exc.pincode}",
-            "pincode":exc.pincode
-        }
+            "error": "Pincode not found",
+            "message": f"No location for pincode:{exc.pincode}",
+            "pincode": exc.pincode,
+        },
     )
 
-async def invalid_pincode(request:Request,exc:InvalidPinCodeError):
+
+async def Invalid_Pincode_Handler(request: Request, exc: Invalid_Pincode_Error):
     return JSONResponse(
         status_code=404,
         content={
-            "error":"pincode not found",
-            "message":f"Pincode '{exc.pincode}'is invalid :{exc.reason}",
-            "pincode":exc.pincode
-        }
+            "error": "Pincode not found",
+            "message": f"Pincode '{exc.pincode}' is invalid '{exc.reason}'",
+            "pincode": exc.pincode,
+        },
     )
