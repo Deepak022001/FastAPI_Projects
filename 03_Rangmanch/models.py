@@ -1,5 +1,4 @@
-
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 from sqlmodel import Field, SQLModel
@@ -11,7 +10,7 @@ class Review(SQLModel, table=True):
     reviewer_name: str
     rating: int = Field(ge=1, le=5)
     comment: str
-    created_at: datetime = Field(default_factory=datetime.now)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class ReviewCreate(SQLModel):
@@ -27,7 +26,7 @@ class ReviewRead(SQLModel):
     reviewer_name: str
     rating: int
     comment: str
-    created_at: datetime
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class ReviewUpdate(SQLModel):
